@@ -19,6 +19,8 @@ return [
             'username' => 'Username',
             'nickname' => 'Nickname',
             'uuid' => 'UUID',
+            'discord-username' => 'Discord Username',
+            'discord-mention' => 'Discord Mention Tag',
             'latest-minecraft-version' => 'Latest Minecraft Version',
             'ip-address' => 'IP Address',
             'country' => 'Country',

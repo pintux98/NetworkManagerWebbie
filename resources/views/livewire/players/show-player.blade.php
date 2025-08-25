@@ -129,12 +129,46 @@
                             <tbody>
                             <tr>
                                 <th scope="row">@lang('player.player.information.username')</th>
-                                <td>{{$player->username}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>{{$player->username}}</span>
+                                        @if($this->hasLuckPermsGroup)
+                                            <span class="badge bg-light text-dark border">
+                                                {!! $this->displayGroupName !!}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
+                            @if($this->hasDiscordLink)
+                                <tr>
+                                    <th scope="row">@lang('player.player.information.discord-username')</th>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="text-primary">
+                                                <i class="fab fa-discord me-1"></i>
+                                                {{$this->discordUsername}}
+                                            </span>
+                                            <small class="text-muted">({{$this->discordTag}})</small>
+                                            <button class="btn btn-sm btn-outline-secondary" 
+                                                    onclick="navigator.clipboard.writeText('{{$this->discordMentionTag}}'); this.innerHTML='&lt;i class=&quot;fas fa-check&quot;&gt;&lt;/i&gt; Copied!'; setTimeout(() => this.innerHTML='&lt;i class=&quot;fas fa-copy&quot;&gt;&lt;/i&gt; Copy', 2000);"
+                                                    title="Copy Discord mention tag">
+                                                <i class="fas fa-copy"></i> Copy
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                             <tr>
-                                <th scope="row">@lang('player.player.information.nickname')</th>
-                                <td>{{$player->nickname}}</td>
-                            </tr>
+                <th scope="row">@lang('player.player.information.nickname')</th>
+                <td>
+                     @if($this->hasZutilsNickname)
+                         {!! $this->formattedZutilsNickname !!}
+                     @else
+                         {{$player->nickname}}
+                     @endif
+                 </td>
+            </tr>
                             <tr>
                                 <th scope="row">@lang('player.player.information.uuid')</th>
                                 <td>{{$player->uuid}}</td>
@@ -173,6 +207,18 @@
                                 <th scope="row">@lang('player.player.information.playtime')</th>
                                 <td>{{$player->playtime}}</td>
                             </tr>
+                            @if($this->hasUltraPlaytimeData)
+                            <tr>
+                                <th scope="row">UltraPlaytime</th>
+                                <td>{{$this->formattedUltraPlaytime}}</td>
+                            </tr>
+                            @endif
+                            @if($this->hasPlaytimeRank)
+                            <tr>
+                                <th scope="row">Rank</th>
+                                <td>{!! $this->formattedPlaytimeRank !!}</td>
+                            </tr>
+                            @endif
                             <tr>
                                 <th scope="row">@lang('player.player.information.online')</th>
                                 <td>@if ($player->online)
