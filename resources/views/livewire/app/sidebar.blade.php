@@ -33,6 +33,14 @@
                     </a>
                 @endif
             @endcan
+            @can('view_players')
+                <a href="/trades"
+
+                   data-mdb-ripple-init
+                   class="list-group-item list-group-item-action py-2 @if(request()->routeIs('trades.*')) active @endif">
+                    <i class="fas fa-exchange-alt fa-fw me-3"></i><span>Trades</span>
+                </a>
+            @endcan
             @can('view_announcements')
                 @if($this->isModuleEnabled('module_announcements'))
                     <a href="/announcements"

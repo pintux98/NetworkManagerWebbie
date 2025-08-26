@@ -21,6 +21,7 @@ use App\Http\Controllers\PlayersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServerStatsController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TradesController;
 use App\Http\Controllers\Webpanel\AccountsController;
 use App\Http\Controllers\Webpanel\AuthenticationController;
 use App\Http\Controllers\Webpanel\OAuthController;
@@ -82,6 +83,7 @@ Route::resource('tags', TagsController::class);
 Route::resource('chatlogs', ChatLogsController::class);
 Route::resource('commandlog', CommandLogController::class);
 Route::resource('serverstats', ServerStatsController::class);
+Route::resource('trades', TradesController::class);
 
 
 
