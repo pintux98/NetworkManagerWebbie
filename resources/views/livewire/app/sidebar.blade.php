@@ -151,6 +151,7 @@
                     <i class="fas fa-terminal fa-fw me-3"></i><span>Command Log</span>
                 </a>
             @endcan
+
             @can('view_network')
                 @if(Auth::user()->can('view_motd') && $this->isModuleEnabled('motd_enabled'))
                     <a href="/motd"

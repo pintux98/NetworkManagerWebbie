@@ -142,6 +142,7 @@ class Group extends Model
         'view_motd' => 'boolean',
         'edit_motd' => 'boolean',
         'view_command_log' => 'boolean',
+        'view_economy_logs' => 'boolean',
 
         'punish_player' => 'boolean',
         'delete_player' => 'boolean',

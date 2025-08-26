@@ -114,6 +114,25 @@
         </div>
     </div>
 
+    <!-- Server Selection Buttons -->
+    <div class="d-flex justify-content-center mb-3">
+        <div class="btn-group" role="group" aria-label="Server Selection">
+            <a href="{{ route('players.details', ['uuid' => $player->uuid, 'server' => 'survival']) }}" 
+               class="btn btn-outline-primary">
+                <i class="material-icons md-18 me-1">terrain</i>
+                Survival
+            </a>
+            <!--
+            <a href="{{ route('players.details', ['uuid' => $player->uuid, 'server' => 'vanilla']) }}" 
+               class="btn btn-outline-secondary">
+                <i class="material-icons md-18 me-1">grass</i>
+                Vanilla
+            </a>-->
+        </div>
+    </div>
+
+
+
     <div class="row gy-4">
         <!-- Player Information -->
         <div class="col-md-6">
@@ -159,16 +178,7 @@
                                     </td>
                                 </tr>
                             @endif
-                            <tr>
-                <th scope="row">@lang('player.player.information.nickname')</th>
-                <td>
-                     @if($this->hasZutilsNickname)
-                         {!! $this->formattedZutilsNickname !!}
-                     @else
-                         {{$player->nickname}}
-                     @endif
-                 </td>
-            </tr>
+                
                             <tr>
                                 <th scope="row">@lang('player.player.information.uuid')</th>
                                 <td>{{$player->uuid}}</td>
@@ -207,18 +217,7 @@
                                 <th scope="row">@lang('player.player.information.playtime')</th>
                                 <td>{{$player->playtime}}</td>
                             </tr>
-                            @if($this->hasUltraPlaytimeData)
-                            <tr>
-                                <th scope="row">UltraPlaytime</th>
-                                <td>{{$this->formattedUltraPlaytime}}</td>
-                            </tr>
-                            @endif
-                            @if($this->hasPlaytimeRank)
-                            <tr>
-                                <th scope="row">Rank</th>
-                                <td>{!! $this->formattedPlaytimeRank !!}</td>
-                            </tr>
-                            @endif
+
                             <tr>
                                 <th scope="row">@lang('player.player.information.online')</th>
                                 <td>@if ($player->online)
@@ -325,6 +324,12 @@
     let mdbTheme = document.documentElement.dataset.mdbTheme
 
     window.loadVersionsChart = () => {
+        // Check if data is empty or invalid
+        if (!data || data.length === 0) {
+            document.getElementById('mostUsedVersionsChart').innerHTML = '<div class="text-center p-4"><em>No version data available</em></div>';
+            return;
+        }
+
         Highcharts.chart('mostUsedVersionsChart', {
             chart: {
                 backgroundColor: 'transparent',

@@ -289,12 +289,23 @@ class Player extends Model
             ->groupBy('version')
             ->get();
 
+        // If no data found, return empty array
+        if ($result->isEmpty()) {
+            return [];
+        }
+
         $data = [];
         foreach ($result as $item) {
             $protocolVersion = ProtocolVersion::tryFrom($item->version);
             $version = $protocolVersion == null ? 'snapshot' : $protocolVersion->name();
 
-            $data[] = ['name' => $version, 'y' => (float) $item->percentage];
+            // Ensure percentage is a valid number
+            $percentage = (float) $item->percentage;
+            if (!is_finite($percentage) || $percentage < 0) {
+                $percentage = 0;
+            }
+
+            $data[] = ['name' => $version, 'y' => $percentage];
         }
 
         return $data;

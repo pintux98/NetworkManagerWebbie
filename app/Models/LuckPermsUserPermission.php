@@ -9,7 +9,7 @@ class LuckPermsUserPermission extends Model
 {
     use HasFactory;
 
-    protected $connection = 'luckperms';
+    protected $connection = 'survivaldb';
     protected $table = 'luckperms_user_permissions';
     protected $primaryKey = 'id';
     public $timestamps = false;

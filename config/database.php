@@ -153,15 +153,15 @@ return [
             ]) : [],
         ],
 
-        'luckperms' => [
+        'survivaldb' => [
             'driver' => 'mysql',
-            'url' => env('LUCKPERMS_DATABASE_URL'),
-            'host' => env('LUCKPERMS_DB_HOST', '127.0.0.1'),
-            'port' => env('LUCKPERMS_DB_PORT', '3306'),
-            'database' => env('LUCKPERMS_DB_DATABASE', 'luckperms'),
-            'username' => env('LUCKPERMS_DB_USERNAME', 'forge'),
-            'password' => env('LUCKPERMS_DB_PASSWORD', ''),
-            'unix_socket' => env('LUCKPERMS_DB_SOCKET', ''),
+            'url' => env('SURVIVALDB_DATABASE_URL'),
+            'host' => env('SURVIVALDB_DB_HOST', '127.0.0.1'),
+            'port' => env('SURVIVALDB_DB_PORT', '3306'),
+            'database' => env('SURVIVALDB_DB_DATABASE', 'survivaldb'),
+            'username' => env('SURVIVALDB_DB_USERNAME', 'forge'),
+            'password' => env('SURVIVALDB_DB_PASSWORD', ''),
+            'unix_socket' => env('SURVIVALDB_DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_520_ci',
             'prefix' => '',
@@ -169,19 +169,20 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('LUCKPERMS_MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_SSL_CA => env('SURVIVALDB_MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_TIMEOUT => 60, // Increase connection timeout
             ]) : [],
         ],
 
-        'ultraplaytime' => [
+        'ervoto' => [
             'driver' => 'mysql',
-            'url' => env('ULTRAPLAYTIME_DATABASE_URL'),
-            'host' => env('ULTRAPLAYTIME_DB_HOST', '127.0.0.1'),
-            'port' => env('ULTRAPLAYTIME_DB_PORT', '3306'),
-            'database' => env('ULTRAPLAYTIME_DB_DATABASE', 'ultraplaytime'),
-            'username' => env('ULTRAPLAYTIME_DB_USERNAME', 'forge'),
-            'password' => env('ULTRAPLAYTIME_DB_PASSWORD', ''),
-            'unix_socket' => env('ULTRAPLAYTIME_DB_SOCKET', ''),
+            'url' => env('ERVOTO_DATABASE_URL'),
+            'host' => env('ERVOTO_DB_HOST', '127.0.0.1'),
+            'port' => env('ERVOTO_DB_PORT', '3306'),
+            'database' => env('ERVOTO_DB_DATABASE', 'ervoto'),
+            'username' => env('ERVOTO_DB_USERNAME', 'forge'),
+            'password' => env('ERVOTO_DB_PASSWORD', ''),
+            'unix_socket' => env('ERVOTO_DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_520_ci',
             'prefix' => '',
@@ -189,7 +190,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('ULTRAPLAYTIME_MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_SSL_CA => env('ERVOTO_MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
     ],

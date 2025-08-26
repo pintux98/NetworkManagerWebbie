@@ -35,4 +35,14 @@ class PlayersController extends Controller
         $this->authorize('view_players');
         return view('players.show')->with('player', $player);
     }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function details(string $uuid, string $server): View
+    {
+        $this->authorize('view_players');
+        $player = Player::where('uuid', $uuid)->firstOrFail();
+        return view('players.details')->with(['player' => $player, 'server' => $server]);
+    }
 }

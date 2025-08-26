@@ -39,11 +39,35 @@ class ShowPlayer extends Component
 
     public ?ZutilsPlayer $zutilsPlayer = null;
 
+    protected $except = ['discordLink', 'discordUser', 'zutilsPlayer'];
+
     public ?array $luckPermsGroup = null;
 
     public ?array $ultraPlaytimeData = null;
 
     public ?array $playtimeRank = null;
+
+    private function sanitizeArrayForJson(?array $data): ?array
+    {
+        if ($data === null) {
+            return null;
+        }
+        
+        return array_filter($data, function($value) {
+            // Only allow scalar values, null, or simple arrays
+            return is_scalar($value) || is_null($value) || (is_array($value) && $this->isSimpleArray($value));
+        });
+    }
+    
+    private function isSimpleArray(array $array): bool
+    {
+        foreach ($array as $value) {
+            if (!is_scalar($value) && !is_null($value)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public function mount(): void
     {
@@ -105,7 +129,7 @@ class ShowPlayer extends Component
                     }
                 }
                 
-                $this->luckPermsGroup = $highestWeightGroup;
+                $this->luckPermsGroup = $this->sanitizeArrayForJson($highestWeightGroup);
             }
         } catch (\Exception $e) {
             // Silently handle database connection errors
@@ -118,11 +142,11 @@ class ShowPlayer extends Component
     {
         try {
             // Get playtime data from UltraPlaytime
-            $this->ultraPlaytimeData = UltraPlaytimeUserData::getPlaytimeByUuid($this->player->uuid);
+            $this->ultraPlaytimeData = $this->sanitizeArrayForJson(UltraPlaytimeUserData::getPlaytimeByUuid($this->player->uuid));
             
             if ($this->ultraPlaytimeData && isset($this->ultraPlaytimeData['playtime'])) {
                 // Calculate rank based on playtime
-                $this->playtimeRank = $this->calculatePlaytimeRank($this->ultraPlaytimeData['playtime']);
+                $this->playtimeRank = $this->sanitizeArrayForJson($this->calculatePlaytimeRank($this->ultraPlaytimeData['playtime']));
             }
         } catch (\Exception $e) {
             // Silently handle database connection errors

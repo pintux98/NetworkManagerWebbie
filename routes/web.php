@@ -68,6 +68,7 @@ Route::resource('punishments', PunishmentsController::class);
 Route::resource('punishment_templates', PunishmentTemplatesController::class);
 Route::resource('analytics', AnalyticsController::class);
 Route::resource('players', PlayersController::class);
+Route::get('/players/{uuid}/{server}/details', [PlayersController::class, 'details'])->name('players.details');
 Route::resource('settings', SettingsController::class);
 Route::resource('languages', LanguagesController::class);
 Route::resource('profile', ProfileController::class);
@@ -81,6 +82,8 @@ Route::resource('tags', TagsController::class);
 Route::resource('chatlogs', ChatLogsController::class);
 Route::resource('commandlog', CommandLogController::class);
 Route::resource('serverstats', ServerStatsController::class);
+
+
 
 //Route::resource('permissions', PermissionsController::class);
 Route::prefix('permissions')->controller(PermissionsController::class)->group(function () {

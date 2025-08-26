@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class UltraPlaytimeUserData extends Model
 {
-    protected $connection = 'ultraplaytime';
+    protected $connection = 'survivaldb';
     protected $table = 'uptime_user_data';
     protected $primaryKey = 'player_uuid';
     public $incrementing = false;
@@ -72,7 +72,7 @@ class UltraPlaytimeUserData extends Model
         try {
             $binaryUuid = self::uuidToBytes($uuid);
             
-            $result = DB::connection('ultraplaytime')
+            $result = DB::connection('survivaldb')
                 ->table('uptime_user_data')
                 ->where('player_uuid', $binaryUuid)
                 ->first();
