@@ -33,6 +33,7 @@ final class PlayerPunishmentsTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Punishment::query()
+            ->with(['player', 'punisher']) // Eager load relationships to prevent N+1 queries
             ->where('uuid', $this->player->uuid)
             ->where('type', '!=', 20)
             ->where('type', '!=', 21);

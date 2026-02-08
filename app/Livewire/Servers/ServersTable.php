@@ -87,6 +87,12 @@ final class ServersTable extends PowerGridComponent
     public function actions(Server $row): array
     {
         return [
+            Button::add('details')
+                ->slot('<i class="material-icons text-primary">visibility</i>')
+                ->can(auth()->user()->can('view_servers'))
+                ->id()
+                ->class('bg-transparent border-0')
+                ->route('server-monitoring.details', ['server' => $row->id]),
             Button::add('info')
                 ->attributes(['data-mdb-ripple-init' => '', 'data-mdb-modal-init' => '', 'data-mdb-target' => '#showServerModal'])
                 ->slot('<i class="material-icons text-info">info</i>')

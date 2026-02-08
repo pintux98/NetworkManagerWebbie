@@ -82,6 +82,10 @@ class AuthServiceProvider extends ServiceProvider
 
             'punish_player',
             'delete_player',
+            
+            // Server Monitoring Permissions
+            'view_other_servers_stats',
+            'edit_other_servers_stats',
         ];
         // Set Permissions
         foreach ($permissions as $permission) {

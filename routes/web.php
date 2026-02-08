@@ -64,6 +64,7 @@ Route::controller(OAuthController::class)->prefix('auth')->group(function () {
 });
 
 Route::resource('servers', ServersController::class);
+Route::get('/server-monitoring/{id}/details', App\Livewire\Servers\ServerDetails::class)->middleware(['auth'])->name('server-monitoring.details');
 Route::resource('announcements', AnnouncementsController::class);
 Route::resource('punishments', PunishmentsController::class);
 Route::resource('punishment_templates', PunishmentTemplatesController::class);
@@ -85,7 +86,10 @@ Route::resource('commandlog', CommandLogController::class);
 Route::resource('serverstats', ServerStatsController::class);
 Route::resource('trades', TradesController::class);
 
-
+// Server Monitoring Routes
+Route::get('/server-monitoring', function () {
+    return view('server-monitoring.index');
+})->middleware(['auth'])->name('server-monitoring.index');
 
 //Route::resource('permissions', PermissionsController::class);
 Route::prefix('permissions')->controller(PermissionsController::class)->group(function () {

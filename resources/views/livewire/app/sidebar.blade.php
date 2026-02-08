@@ -61,6 +61,14 @@
                     </a>
                 @endif
             @endcan
+            @can('view_other_servers_stats')
+                <a href="/server-monitoring"
+
+                   data-mdb-ripple-init
+                   class="list-group-item list-group-item-action py-2 @if(request()->routeIs('server-monitoring.*')) active @endif">
+                    <i class="fas fa-desktop fa-fw me-3"></i><span>Server Monitoring</span>
+                </a>
+            @endcan
             @can('view_pre_punishments')
                 @if($this->isModuleEnabled('module_pre_punishments'))
                     <a href="/punishment_templates"

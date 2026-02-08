@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 use Nwidart\Modules\Facades\Module;
 use Ramsey\Uuid\Uuid;
+use App\Models\Player\PlayerPing;
+use App\Models\Player\Session;
+use App\Models\Player\Login;
 
 class Player extends Model
 {
@@ -218,20 +221,13 @@ class Player extends Model
 
     public function getAveragePlaytime(): string
     {
-        $data = Session::select('time')
-            ->where('uuid', $this->uuid)
-            ->get();
-        $count = $data->count();
-
-        $time = 0;
-        foreach ($data as $item) {
-            $time += $item->time;
+        // Use a single query to get the average playtime
+        $averagePlaytime = Session::where('uuid', $this->uuid)->avg('time');
+        
+        if ($averagePlaytime === null || $averagePlaytime == 0) {
+            return '0 seconds';
         }
-        if ($count == 0) {
-            $averagePlaytime = 0;
-        } else {
-            $averagePlaytime = $time / $count;
-        }
+        
         try {
             return CarbonInterval::millisecond($averagePlaytime)->cascade()->forHumans();
         } catch (\Exception $ex) {
@@ -241,12 +237,14 @@ class Player extends Model
 
     public function getAverageDailyLogin(): string
     {
-        $data = Session::select('start')
-            ->where('uuid', $this->uuid)
-            ->groupBy('uuid')
-            ->avg('start');
+        // Use a single query to get the average start time
+        $averageStart = Session::where('uuid', $this->uuid)->avg('start');
+        
+        if ($averageStart === null) {
+            return '00:00:00';
+        }
 
-        return date('H:i:s', $data / 1000);
+        return date('H:i:s', $averageStart / 1000);
     }
 
     public function getSessions(): \Illuminate\Support\Collection
@@ -265,18 +263,16 @@ class Player extends Model
     public function getAltAccounts(): Collection
     {
         $last30DaysMs = Carbon::now()->subDays(30)->getTimestampMs();
-        $altUUIDs = Login::select('uuid')
-            ->where('uuid', '!=', $this->uuid)
-            ->where('ip', $this->ip)
-            ->where('time', '>', $last30DaysMs)
-            ->distinct()
-            ->get();
-
-        if ($altUUIDs->isEmpty()) {
-            return Collection::empty();
-        }
-
-        return Player::whereIn('uuid', $altUUIDs)->get();
+        
+        // Use a single query with join to get alt accounts directly
+        return Player::whereIn('uuid', function($query) use ($last30DaysMs) {
+            $query->select('uuid')
+                ->from('logins')
+                ->where('uuid', '!=', $this->uuid)
+                ->where('ip', $this->ip)
+                ->where('time', '>', $last30DaysMs)
+                ->distinct();
+        })->get();
     }
 
     public function getMostUsedVersions()
@@ -313,10 +309,19 @@ class Player extends Model
 
     public function getPingDataAsString(): string
     {
-        $playerPing = PlayerPing::select('min_ping', 'max_ping', 'avg_ping')->where('uuid', $this->uuid)->get();
-        $min = $playerPing->min('min_ping') ?? 0;
-        $max = $playerPing->max('max_ping') ?? 0;
-        $avg = round($playerPing->avg('avg_ping'), 2);
+        // Use a single query with aggregation functions
+        $pingData = PlayerPing::selectRaw('MIN(min_ping) as min_ping, MAX(max_ping) as max_ping, AVG(avg_ping) as avg_ping')
+            ->where('uuid', $this->uuid)
+            ->first();
+            
+        if (!$pingData) {
+            return "Avg 0ms, Best 0ms, Worst 0ms";
+        }
+        
+        $min = $pingData->min_ping ?? 0;
+        $max = $pingData->max_ping ?? 0;
+        $avg = round($pingData->avg_ping ?? 0, 2);
+        
         return "Avg {$avg}ms, Best {$min}ms, Worst {$max}ms";
     }
 
